@@ -1,0 +1,27 @@
+echo "# ai_chatbot" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/dipguha/ai_chatbot.git
+git push -u origin main
+
+
+agentcore add memory --name SharedMemory --strategies SEMANTIC,SUMMARIZATION --expiry 30
+
+
+2
+3
+4
+SESSION_A=$(python3 -c 'import uuid; print(uuid.uuid4())')
+echo "Session ID: $SESSION_A"
+
+agentcore invoke "My name is Dip and I prefer email updates. I recently bought a Smart Watch." --session-id $SESSION_A \
+  -H "X-Amzn-Bedrock-AgentCore-Runtime-Custom-User-Id: Dip" --stream
+
+
+sleep 2m
+SESSION_B=$(python3 -c 'import uuid; print(uuid.uuid4())')
+echo "Session ID: $SESSION_B"
+
+agentcore invoke "What do you know about me?" --session-id $SESSION_B -H "X-Amzn-Bedrock-AgentCore-Runtime-Custom-User-Id: Dip" --stream
