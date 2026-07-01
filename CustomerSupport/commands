@@ -6,6 +6,8 @@ git branch -M main
 git remote add origin https://github.com/dipguha/ai_chatbot.git
 git push -u origin main
 
+git push --set-upstream origin add-gateway
+
 
 agentcore add memory --name SharedMemory --strategies SEMANTIC,SUMMARIZATION --expiry 30
 
@@ -31,3 +33,17 @@ agentcore invoke "What do you know about me?" --session-id $SESSION_B -H "X-Amzn
 WARRANTY_LAMBDA_ARN=$(aws ssm get-parameter --name /app/customersupport/agentcore/warranty_check_lambda_arn --query 'Parameter.Value' --output text)
 
 echo "Lambda ARN: $WARRANTY_LAMBDA_ARN"
+
+agentcore add gateway --name my-gateway --runtimes CustomerSupport
+
+agentcore add gateway-target \
+  --type lambda-function-arn \
+  --name WarrantyCheck \
+  --lambda-arn $WARRANTY_LAMBDA_ARN \
+  --tool-schema-file app/CustomerSupport/tool/warranty_schema.json \
+  --gateway my-gateway
+
+  -------------------------------------------------------------
+SESSION_C=$(python3 -c "import uuid; print(uuid.uuid4())")
+
+agentcore invoke "Check the warranty for product PROD-003" --session-id $SESSION_C -H "X-Amzn-Bedrock-AgentCore-Runtime-Custom-User-Id: Dip" --stream
