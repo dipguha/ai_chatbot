@@ -25,3 +25,9 @@ SESSION_B=$(python3 -c 'import uuid; print(uuid.uuid4())')
 echo "Session ID: $SESSION_B"
 
 agentcore invoke "What do you know about me?" --session-id $SESSION_B -H "X-Amzn-Bedrock-AgentCore-Runtime-Custom-User-Id: Dip" --stream
+
+
+---------------------------------
+WARRANTY_LAMBDA_ARN=$(aws ssm get-parameter --name /app/customersupport/agentcore/warranty_check_lambda_arn --query 'Parameter.Value' --output text)
+
+echo "Lambda ARN: $WARRANTY_LAMBDA_ARN"

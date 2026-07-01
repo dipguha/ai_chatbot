@@ -1,15 +1,15 @@
 from strands import Agent, tool
 from bedrock_agentcore.runtime import BedrockAgentCoreApp
 from model.load import load_model
-from mcp_client.client import get_streamable_http_mcp_client
+from mcp_client.client import get_streamable_http_mcp_client, get_gateway_mcp_client
 from memory.session import get_memory_session_manager
-
+import json
 
 app = BedrockAgentCoreApp()
 log = app.logger
 
 # Exa AI MCP client for web search
-mcp_clients = [get_streamable_http_mcp_client()]
+mcp_clients = [get_streamable_http_mcp_client(), get_gateway_mcp_client()]
 
 SYSTEM_PROMPT="""You are a helpful and professional customer support assistant for an e-commerce company.
 Your role is to:
